@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .login-header {
+            margin-bottom: 30px;
+        }
+        
+        .login-header h2 {
+            color: #4a6bff;
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .login-form input:focus {
+            border-color: #4a6bff;
+            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+            outline: none;
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a6bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .login-btn:hover {
+            background-color: #3a5bef;
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <div class="login-header">
+            <h2>Student Login</h2>
+            <p>Enter your credentials to access the dashboard</p>
+        </div>
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="studentId">Student ID</label>
+                <input type="text" id="studentId" placeholder="Enter your student ID" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                </div>
+            </div>
+            <button type="submit" class="login-btn">Login</button>
+            <div class="error-message" id="errorMessage">Invalid student ID or password. Please try again.</div>
+        </form>
+    </div>
+
+    <script>
+        // Student credentials database
+        const studentCredentials = {
+            "stu001": { password: "yJq39P!n", name: "Sarita Yin" },
+            "stu002": { password: "bNj2Qw7!", name: "Vanna" },
+            "stu003": { password: "vKz41Cp@", name: "Ran Piseth" },
+            "stu004": { password: "tVt61GxP!", name: "Chanrachna Oum" },
+            "stu005": { password: "lSx88Jh#", name: "Sean Lavy" },
+            "stu006": { password: "qFb49VvB!", name: "Sroeun Sophea" },
+            "stu007": { password: "hPb52TzM@", name: "Ban Sophea" },
+            "stu008": { password: "rCk34Nw#", name: "Kean Kimhour" },
+            "stu009": { password: "mJs55LzF!", name: "Biya" },
+            "stu010": { password: "kWp61DsT@", name: "Phat Khemcheat" },
+            "stu011": { password: "jRq30GxM!", name: "Yon Thavika" },
+            "stu012": { password: "iSc32AwP@", name: "Chut Cheata" },
+            "stu013": { password: "tUe89VbZ!", name: "Keng Bora" },
+            "stu014": { password: "gXy72LwA@", name: "Yin Vouchngin" },
+            "stu015": { password: "eNf50QcJ!", name: "Vatana" },
+            "stu016": { password: "pKr29UvB@", name: "Channy" },
+            "stu017": { password: "fCp63WhM!", name: "Wat Domboukkpous" },
+            "stu018": { password: "aBx34TzR@", name: "Kompheak" },
+            "stu019": { password: "wPo71VrD!", name: "Daly" },
+            "stu020": { password: "sQa93KhB@", name: "Vouch Neang" },
+            "stu021": { password: "pGd25VtK!", name: "Sorm Seyha" },
+            "stu022": { password: "yUq12BwP@", name: "Rom Sopheaktra" },
+            "stu023": { password: "jWx76SgL!", name: "Punleu Chhon" },
+            "stu024": { password: "rZc57VjX@", name: "Venerable Oudom" },
+            "stu025": { password: "gZp81UtM!", name: "[Student Name 25]" },
+            "stu026": { password: "cYv65KrS@", name: "[Student Name 26]" },
+            "stu027": { password: "oTx37TjG!", name: "[Student Name 27]" },
+            "stu028": { password: "vLm93FgB@", name: "[Student Name 28]" },
+            "stu029": { password: "pKq12MsT!", name: "[Student Name 29]" },
+            "stu030": { password: "wNz76FpJ@", name: "[Student Name 30]" },
+            "stu031": { password: "xYs43DzL!", name: "[Student Name 31]" }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const errorMessage = document.getElementById('errorMessage');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye-slash');
+            });
+            
+            // Handle form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const studentId = document.getElementById('studentId').value.trim();
+                const password = document.getElementById('password').value;
+                
+                // Validate credentials
+                if (studentCredentials[studentId] && studentCredentials[studentId].password === password) {
+                    // Successful login - store user info and redirect to dashboard
+                    localStorage.setItem('currentStudent', JSON.stringify({
+                        id: studentId,
+                        name: studentCredentials[studentId].name
+                    }));
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Show error message
+                    errorMessage.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
